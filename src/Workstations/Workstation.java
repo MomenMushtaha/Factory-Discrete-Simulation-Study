@@ -1,11 +1,19 @@
 package Workstations;
-public class Workstation3 {
+//Created by Mohamed Abdalla
+public class Workstation {
     /*
-     * Creates product when buffers c13 and c33 send
+     * Creates product when buffer c11 sends
     */
-    private double averageTime;
 
-    public Workstation3(double averageTime){
+    private double averageTime;
+    private Integer Id;
+
+
+
+
+    //W1, W2, W3 constructors
+    public Workstation(int Id, double averageTime){
+        this.Id = Id;
         this.averageTime = averageTime;
         getAverageTime();
     }
