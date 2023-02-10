@@ -2,7 +2,7 @@ package Inspectors;
 
 
 import java.util.Random;
-import Buffers.Buffers;
+import Buffers_Product.*;
 
 public class inspector2 {
     /*
