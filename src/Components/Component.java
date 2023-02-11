@@ -4,7 +4,7 @@ public class Component {
 
     private final CTypes componentType;
 
-    public Component(CTypes componentType) {
+    public Component(CTypes[] componentType) {
         this.componentType = componentType;
     }
 

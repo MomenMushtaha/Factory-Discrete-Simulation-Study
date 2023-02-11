@@ -22,8 +22,8 @@ public class Workstation implements Runnable{
     private int totalP3;
     private Product product;
     private PTypes pTypes;
+    private ArrayList<CTypes> cTypes;
     private Component component;
-    private CTypes cTypes;
 
 
     //W1, W2, W3 constructors
@@ -34,13 +34,19 @@ public class Workstation implements Runnable{
         this.buffer = buffer;
 
         if (workstationId == 1){
+            this.component = new Component(new CTypes[]{CTypes.C1});
+            this.product = new Product(PTypes.P1);
             W1 = true;
 
             totalP1 = 0;
         } else if (workstationId == 2) {
+            this.component = new Component(new CTypes[]{CTypes.C1,CTypes.C2});
+            this.product = new Product(PTypes.P2);
             W2 = true;
             totalP2 = 0;
         } else if (workstationId == 3) {
+            this.component = new Component(new CTypes[]{CTypes.C1,CTypes.C3});
+            this.product = new Product(PTypes.P3);
             W3 = true;
             totalP3 = 0;
         }
