@@ -1,5 +1,6 @@
 package Workstations;
-
+import Buffers_Product.Product;
+import Components.*;
 import Buffers_Product.Buffers;
 import Buffers_Product.PTypes;
 import java.util.ArrayList;
@@ -9,7 +10,6 @@ public class Workstation implements Runnable{
     private double averageTime;
     private Buffers buffer;
     int workstationId;
-    private double averageTime;
     Boolean W1 = false;
     Boolean W2 = false;
     Boolean W3 = false;
@@ -20,22 +20,27 @@ public class Workstation implements Runnable{
     private int totalP1;
     private int totalP2;
     private int totalP3;
+    private Product product;
+    private PTypes pTypes;
+    private Component component;
+    private CTypes cTypes;
 
 
     //W1, W2, W3 constructors
-    public Workstation(int workstationId, double averageTime, PTypes workstationProduct, Buffers buffer){
+    public Workstation(int workstationId, double averageTime,Buffers buffer ){
         this.workstationId = workstationId;
         this.averageTime = averageTime;
         this.state = States.IDLE;
         this.buffer = buffer;
 
-        if (workstationProduct.equals(PTypes.P1)){
+        if (workstationId == 1){
             W1 = true;
+
             totalP1 = 0;
-        } else if (workstationProduct.equals(PTypes.P2)) {
+        } else if (workstationId == 2) {
             W2 = true;
             totalP2 = 0;
-        } else if (workstationProduct.equals(PTypes.P3)) {
+        } else if (workstationId == 3) {
             W3 = true;
             totalP3 = 0;
         }

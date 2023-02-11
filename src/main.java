@@ -1,3 +1,4 @@
+import Buffers_Product.Buffers;
 import Inspectors.*;
 import Workstations.*;
 
@@ -7,8 +8,8 @@ import java.util.Scanner;
 
 public class main {
     public double avg1, avg22, avg23;   //Inspector Average Values
-    public double ws1, ws2, ws3;        //Workstation Average Values 
-
+    public double ws1, ws2, ws3;        //Workstation Average Values //
+    public Buffers buffers;
     public main(){
         // Setting Average times of each '.dat' file
         avg1 = AvgTime("servinsp1.dat");
@@ -18,14 +19,18 @@ public class main {
         ws1 = AvgTime("ws1.dat");
         ws2 = AvgTime("ws2.dat");
         ws3 = AvgTime("ws3.dat");
+        buffers = new Buffers();
 
-        // Assigning respective times 
-        inspector1 in1 = new inspector1(getAvg1());
-        inspector2 in2 = new inspector2(getAvg22(), getAvg23());
-        
-        Workstation1 w1 = new Workstation1(getWs1());
-        Workstation2 w2 = new Workstation2(getWs2());
-        Workstation3 w3 = new Workstation3(getWs3());
+        Inspector1 in1 = new Inspector1(1, getAvg1(), buffers);
+        Inspector2 in2 = new Inspector2(2, getAvg22(), getAvg23(), buffers);
+
+
+        Workstation w1 = new Workstation(1, getWs1(), buffers);
+        Workstation w2 = new Workstation(2, getWs2(), buffers);
+        Workstation w3 = new Workstation(3,getWs3(), buffers);
+
+        Thread t1 = new Thread(in1);
+        Thread t2 = new Thread(in2);
     }
 
     /*

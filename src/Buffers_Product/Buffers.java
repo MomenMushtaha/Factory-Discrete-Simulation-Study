@@ -5,29 +5,31 @@ import java.util.concurrent.Semaphore;
 
 public class Buffers {
 
+
     //Timer for beggining of system operation
     public long genisis = System.currentTimeMillis();
 
+
     //Buffers capacity arraylist of size 2
-    private ArrayList<Integer> bufC1 = new ArrayList<>(2);    
-    private ArrayList<Integer> bufC12 = new ArrayList<>(2);    
-    private ArrayList<Integer> bufC22 = new ArrayList<>(2);    
-    private ArrayList<Integer> bufC13 = new ArrayList<>(2);    
-    private ArrayList<Integer> bufC23 = new ArrayList<>(2);    
+    public ArrayList<Integer> bufC1 = new ArrayList<>(2);
+    public ArrayList<Integer> bufC12 = new ArrayList<>(2);
+    public ArrayList<Integer> bufC22 = new ArrayList<>(2);
+    public ArrayList<Integer> bufC13 = new ArrayList<>(2);
+    public ArrayList<Integer> bufC23 = new ArrayList<>(2);
     
     //Semaphore of 2 permits fro each buffer
-    private Semaphore sema1 = new Semaphore(2);                                         
-    private Semaphore sema12 = new Semaphore(2);                                         
-    private Semaphore sema22 = new Semaphore(2);                                         
-    private Semaphore sema13 = new Semaphore(2);                                         
-    private Semaphore sema23 = new Semaphore(2);                                         
+    public Semaphore sema1 = new Semaphore(2);
+    public Semaphore sema12 = new Semaphore(2);
+    public Semaphore sema22 = new Semaphore(2);
+    public Semaphore sema13 = new Semaphore(2);
+    public Semaphore sema23 = new Semaphore(2);
 
     //Time Buffers are occupied
-    private long busyTime1 = 0;                                                                       
-    private long busyTime12 = 0;   
-    private long busyTime22 = 0;   
-    private long busyTime13 = 0;   
-    private long busyTime23 = 0;   
+    public long busyTime1 = 0;
+    public long busyTime12 = 0;
+    public long busyTime22 = 0;
+    public long busyTime13 = 0;
+    public long busyTime23 = 0;
     
     
 
