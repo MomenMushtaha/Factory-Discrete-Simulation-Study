@@ -29,13 +29,8 @@ public class Buffers {
     private long busyTime13 = 0;   
     private long busyTime23 = 0;   
     
-
-  
     
 
-    public Buffers(){
-        
-    }
 
     /*
      * Buffer has received an interrupt indicating that a component is received.
@@ -107,7 +102,7 @@ public class Buffers {
      * 
      * @param stationNum    Workstation Signifier to indicate which buffer to receive from
     */
-    public void Wget(int stationNum) throws InterruptedException{
+    public void Wget(int stationNum){
         //Checks which station is requesting component
         switch( stationNum ){
             case 1:
@@ -125,9 +120,6 @@ public class Buffers {
                 //Releases semaphore hold
                 sema1.release();
             }
-            while (bufC1.size() == 0) {
-                wait();
-            }
             
             case 2:
             while ( (bufC12.size() > 0) && (bufC22.size() > 0)) {
@@ -143,9 +135,6 @@ public class Buffers {
                 bufC22.remove(0);
                 sema22.release();
             }
-            while ((bufC12.size() == 0) && (bufC22.size() == 0)) {
-                wait();
-            }
             
             case 3:
             while ((bufC13.size() > 0) && (bufC23.size() > 0)) {
@@ -160,28 +149,14 @@ public class Buffers {
                 bufC23.remove(0);
                 sema23.release();
             }
-            while ((bufC13.size() == 0) && (bufC23.size() == 0)) {
-                wait();
-            }
-            
             
         }
         
     }
 
-    /*
-     * Stops the Buffer from running.
-     * Calculates elapsed time of buffer activities
-     * Prints out some of the logging information: Inspector Blocked Perecentage and Buffer Occupany Rate
-     * 
-     * @return elapsedTime    Buffer runtime.
-    */
     public long stop(){
-        //Calculates Runtime
         long arma = System.currentTimeMillis();
         long elapsedTIme = arma - genisis;
-
-
         System.out.println("Demo Stopped");
 
         System.out.println("Inspectors");
@@ -196,7 +171,7 @@ public class Buffers {
         System.out.println("33 - Occupied Chance: " + (busyTime23)/elapsedTIme * 100 +"%");
 
         
-        
+
         return elapsedTIme;
     }
 

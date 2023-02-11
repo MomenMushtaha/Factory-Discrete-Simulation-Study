@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import Buffers_Product.Buffers;
-
 public class main {
     public double avg1, avg22, avg23;   //Inspector Average Values
     public double ws1, ws2, ws3;        //Workstation Average Values 
@@ -21,19 +19,13 @@ public class main {
         ws2 = AvgTime("ws2.dat");
         ws3 = AvgTime("ws3.dat");
 
-        //Creating Buffer
-        Buffers buffer = new Buffers();
-        
         // Assigning respective times 
-        Inspector1 in1 = new Inspector1(1, getAvg1(), buffer);
-        Inspector2 in2 = new Inspector2(2, getAvg22(), getAvg23(), buffer);
+        inspector1 in1 = new inspector1(getAvg1());
+        inspector2 in2 = new inspector2(getAvg22(), getAvg23());
         
-        Workstation w1 = new Workstation(1, getWs1(), buffer);
-        Workstation w2 = new Workstation(2, getWs2(), buffer);
-        Workstation w3 = new Workstation(3,getWs3(), buffer);
-
-        Thread t1 = new Thread(in1);
-        Thread t2 = new Thread(in2);
+        Workstation1 w1 = new Workstation1(getWs1());
+        Workstation2 w2 = new Workstation2(getWs2());
+        Workstation3 w3 = new Workstation3(getWs3());
     }
 
     /*

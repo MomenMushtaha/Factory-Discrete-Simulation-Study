@@ -2,14 +2,14 @@ package Components;
 
 public class Component {
 
-    private final ComponentType type;
+    private final CTypes componentType;
 
-    public Component(ComponentType type) {
-        this.type = type;
+    public Component(CTypes componentType) {
+        this.componentType = componentType;
     }
 
-    public ComponentType getType() {
-        return this.type;
+    public CTypes getType() {
+        return this.componentType;
     }
 
 }
