@@ -1,25 +1,36 @@
 package Workstations;
-//Created by Mohamed Abdalla
-public class Workstation {
-    /*
-     * Creates product when buffer c11 sends
-    */
 
+import Buffers_Product.Buffers;
+
+public class Workstation implements Runnable{
     private double averageTime;
-    private Integer Id;
+    private int Id;
+    private Buffers buffer;
 
 
-
-
-    //W1, W2, W3 constructors
-    public Workstation(int Id, double averageTime){
+    public Workstation(int Id, double averageTime, Buffers buffer){
         this.Id = Id;
         this.averageTime = averageTime;
-        getAverageTime();
+        this.buffer = buffer;
     }
 
-    public double getAverageTime() {
-        System.out.println("ws1 avg = " + averageTime);
-        return averageTime;
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+              
+        while (true){
+            try {
+                buffer.Wget(getId());
+                Thread.sleep((long)averageTime);
+                } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }  
+        
     }
+
+    public int getId() {
+        return Id;
+    }
+    
 }
