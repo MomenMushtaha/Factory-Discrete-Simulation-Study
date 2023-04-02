@@ -2,11 +2,15 @@ public class Component {
     private String type;
     private int inspectorId;
     private double arrivalTime;
+    private int requiredForP1, requiredForP2, requiredForP3;
 
-    public Component(String type, int inspectorId, double arrivalTime) {
+    public Component(String type, int inspectorId, double arrivalTime, int requiredForP1, int requiredForP2, int requiredForP3) {
         this.type = type;
         this.inspectorId = inspectorId;
         this.arrivalTime = arrivalTime;
+        this.requiredForP1 = requiredForP1;
+        this.requiredForP2 = requiredForP2;
+        this.requiredForP3 = requiredForP3;
     }
 
     public String getType() {
@@ -19,6 +23,18 @@ public class Component {
 
     public double getArrivalTime() {
         return arrivalTime;
+    }
+
+    public int getRequiredForP1() {
+        return requiredForP1;
+    }
+
+    public int getRequiredForP2() {
+        return requiredForP2;
+    }
+
+    public int getRequiredForP3() {
+        return requiredForP3;
     }
 
 }

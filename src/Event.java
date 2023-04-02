@@ -1,5 +1,3 @@
-import javax.swing.event.DocumentEvent.EventType;
-
 public class Event implements Comparable<Event> {
     private EventType type;
     private double time;
@@ -14,6 +12,10 @@ public class Event implements Comparable<Event> {
         this.inspector = inspector;
         this.workstation = workstation;
     }
+
+
+
+
 
     public EventType getType() {
         return type;
