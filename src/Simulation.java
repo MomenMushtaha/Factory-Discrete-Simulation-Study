@@ -6,7 +6,10 @@ import java.util.Scanner;
 public class Simulation {
     public double avg1, avg22, avg23; // Inspector Average Values
     public double ws1, ws2, ws3; // Workstation Average Values
-    private int completedP1, completedP2, completedP3; // Completed Components
+    int completedP1;
+    int completedP2;
+    int completedP3; // Completed Components
+    double simulationTime; // Add this line
 
     public Simulation() {
         // Setting Average times of each '.dat' file
@@ -16,6 +19,11 @@ public class Simulation {
         ws1 = AvgTime("ProjectFiles/ws1.dat");
         ws2 = AvgTime("ProjectFiles/ws2.dat");
         ws3 = AvgTime("ProjectFiles/ws3.dat");
+    }
+
+    public Simulation(double simulationTime) {
+        this();
+        this.simulationTime = simulationTime;
     }
 
     // This method reads the .dat files and calculates the average processing times
@@ -71,6 +79,7 @@ public class Simulation {
         // Run the simulation for a fixed time (10,000 seconds in this case)
         double simulationTime = 10000.0;
         int assembledProducts = 0;
+        // Run the simulation for the given simulation time
         while (!eventQueue.isEmpty() && eventQueue.peek().getTime() <= simulationTime) {
             Event event = eventQueue.poll();
 
@@ -178,7 +187,28 @@ public class Simulation {
     }
 
     public static void main(String[] args) {
-        Simulation simulation = new Simulation();
-        simulation.simulate();
+        // monte carlo replication -> Validation of the simulation model
+        int numberOfReplications = 12; // Number of replications for Monte Carlo simulation
+        double totalCompletedP1 = 0;
+        double totalCompletedP2 = 0;
+        double totalCompletedP3 = 0;
+
+        for (int i = 0; i < numberOfReplications; i++) {
+            Simulation simulation = new Simulation();
+            simulation.simulate();
+            totalCompletedP1 += simulation.completedP1;
+            totalCompletedP2 += simulation.completedP2;
+            totalCompletedP3 += simulation.completedP3;
+        }
+
+        double averageCompletedP1 = totalCompletedP1 / numberOfReplications;
+        double averageCompletedP2 = totalCompletedP2 / numberOfReplications;
+        double averageCompletedP3 = totalCompletedP3 / numberOfReplications;
+
+        System.out.printf("Average assembled products for P1: %.2f%n", averageCompletedP1);
+        System.out.printf("Average assembled products for P2: %.2f%n", averageCompletedP2);
+        System.out.printf("Average assembled products for P3: %.2f%n", averageCompletedP3);
     }
+
+
 }
