@@ -1,3 +1,4 @@
+// Represents a workstation with an ID, buffer for components, and finish time
 import java.util.HashMap;
 import java.util.Map;
 

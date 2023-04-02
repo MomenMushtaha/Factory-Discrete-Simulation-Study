@@ -1,3 +1,4 @@
+// Represents a component with its type, inspector ID, arrival time, and required quantities for products P1, P2, and P3
 public class Component {
     private String type;
     private int inspectorId;

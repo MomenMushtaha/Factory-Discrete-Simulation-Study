@@ -1,3 +1,4 @@
+// Represents an inspector with an ID, queue, and finish time
 public class Inspector {
     private int id;
     private int queue;

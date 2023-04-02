@@ -1,3 +1,4 @@
+// Represents an event with a type, time, associated component, inspector, and workstation
 public class Event implements Comparable<Event> {
     private EventType type;
     private double time;
