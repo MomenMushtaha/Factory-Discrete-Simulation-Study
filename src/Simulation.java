@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
@@ -88,7 +87,7 @@ public class Simulation {
         eventQueue.add(new Event(EventType.INSPECTION_FINISHED, avg23, c3, inspector2, null));
 
         // Run the simulation for a fixed time (10,000 seconds in this case)
-        simulationTime = 200.0;
+        simulationTime = 10000.0;
         int assembledProducts = 0;
         while (!eventQueue.isEmpty() && eventQueue.peek().getTime() <= simulationTime) {
             Event event = eventQueue.poll();
@@ -111,6 +110,7 @@ public class Simulation {
 
 
         printLittlesLawResults();
+
     }
 
     // This method handles the inspection finished events
@@ -245,73 +245,36 @@ public class Simulation {
     }
 
     public void printLittlesLawResults() {
-        double averageTimeInSystemWS1 = (totalTimeSpentInQueueWS1 + totalProcessingTimeWS1) / completedP1;
-        double averageTimeInSystemWS2 = (totalTimeSpentInQueueWS2 + totalProcessingTimeWS2) / completedP2;
-        double averageTimeInSystemWS3 = (totalTimeSpentInQueueWS3 + totalProcessingTimeWS3) / completedP3;
-
+        double avgTimeInSystemWS1 = (totalTimeSpentInQueueWS1 + totalProcessingTimeWS1) / completedP1;
+        double avgTimeInSystemWS2 = (totalTimeSpentInQueueWS2 + totalProcessingTimeWS2) / completedP2;
+        double avgTimeInSystemWS3 = (totalTimeSpentInQueueWS3 + totalProcessingTimeWS3) / completedP3;
 
         double lambda1 = (double) completedP1 / simulationTime;
         double lambda2 = (double) completedP2 / simulationTime;
         double lambda3 = (double) completedP3 / simulationTime;
 
-        double L1 = lambda1 * averageTimeInSystemWS1;
-        double L2 = lambda2 * averageTimeInSystemWS2;
-        double L3 = lambda3 * averageTimeInSystemWS3;
+        double L1 = lambda1 * avgTimeInSystemWS1;
+        double L2 = lambda2 * avgTimeInSystemWS2;
+        double L3 = lambda3 * avgTimeInSystemWS3;
 
-        System.out.printf("Little's Law Results:%n");
-        System.out.printf("Workstation 1 - Average time in system (W): %.2f, Average arrival rate (λ): %.4f, Average number of components in system (L): %.2f%n", averageTimeInSystemWS1, lambda1, L1);
-        System.out.printf("Workstation 2 - Average time in system (W): %.2f, Average arrival rate (λ): %.4f, Average number of components in system (L): %.2f%n", averageTimeInSystemWS2, lambda2, L2);
-        System.out.printf("Workstation 3 - Average time in system (W): %.2f, Average arrival rate (λ): %.4f, Average number of components in system (L): %.2f%n", averageTimeInSystemWS3, lambda3, L3);
+        double avgTimeInSystemFacility = (totalTimeSpentInQueueWS1 + totalTimeSpentInQueueWS2 + totalTimeSpentInQueueWS3
+                + totalProcessingTimeWS1 + totalProcessingTimeWS2 + totalProcessingTimeWS3) / (completedP1 + completedP2 + completedP3);
+
+        double lambdaFacility = (double) (completedP1 + completedP2 + completedP3) / simulationTime;
+
+        double LFacility = lambdaFacility * avgTimeInSystemFacility;
+
+        System.out.println("Little's Law Results:");
+        System.out.printf("Workstation 1 - Avg time in system (W): %.2f, Avg arrival rate (λ): %.4f, Avg # of components in system (L): %.2f%n", avgTimeInSystemWS1, lambda1, L1);
+        System.out.printf("Workstation 2 - Avg time in system (W): %.2f, Avg arrival rate (λ): %.4f, Avg # of components in system (L): %.2f%n", avgTimeInSystemWS2, lambda2, L2);
+        System.out.printf("Workstation 3 - Avg time in system (W): %.2f, Avg arrival rate (λ): %.4f, Avg # of components in system (L): %.2f%n", avgTimeInSystemWS3, lambda3, L3);
+        System.out.printf("Facility - Avg time in system (W): %.2f, Avg arrival rate (λ): %.4f, Avg # of components in system (L): %.2f%n", avgTimeInSystemFacility, lambdaFacility, LFacility);
     }
 
     public static void main(String[] args) {
-        int numSims = 10;
-        double[] ensembleAvgs = new double[101];
 
-        // Initialization phase
-        int initializationTime = 10000;
-        for (int i = 0; i < initializationTime; i++) {
             Simulation initializationSimulation = new Simulation();
             initializationSimulation.simulate();
-        }
 
-        // Ensemble averaging loop
-        for (int i = 0; i < numSims; i++) {
-            Simulation simulation = new Simulation();
-            simulation.simulate();
-            ensembleAvgs[i] = simulation.completedP1;
-        }
-
-        // Calculate ensemble averages
-        double[] steps = new double[100];
-
-        for (int i = 0; i < steps.length; i++) {
-            double sum = 0;
-
-            for (double ensembleAvg : ensembleAvgs) {
-                sum += ensembleAvg;
-            }
-
-            steps[i] = sum / numSims;
-        }
-
-        // Calculate standard deviation
-        double[] deviation = new double[steps.length];
-
-        for (int i = 0; i < steps.length; i++) {
-            double sumOfSquares = 0;
-
-            for (double ensembleAvg : ensembleAvgs) {
-                sumOfSquares += Math.pow(ensembleAvg - steps[i], 2);
-            }
-
-            deviation[i] = Math.sqrt(sumOfSquares / (numSims - 1));
-        }
-
-
-        // Print time step ensemble averages and standard deviations
-        for (int i = 0; i < steps.length; i++) {
-            System.out.printf("Time: "+i+", Ensemble Average: "+steps[i]+ ", Standard Deviation:" +deviation[i]+ "\n"  );
-        }
     }
     }

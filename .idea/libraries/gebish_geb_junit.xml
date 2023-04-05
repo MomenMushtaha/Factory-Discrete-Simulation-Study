@@ -1,0 +1,24 @@
+<component name="libraryTable">
+  <library name="gebish.geb.junit" type="repository">
+    <properties maven-id="org.gebish:geb-junit:5.1" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/geb-junit-5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geb-core-5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/selenium-api-3.141.59.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geb-ast-5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy-macro-3.0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geb-waiting-5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geb-implicit-assertions-5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/geb-exceptions-5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/threeten-extra-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jodd-lagarto-5.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jodd-core-5.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jodd-log-5.1.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy-3.0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy-templates-3.0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/groovy-xml-3.0.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
