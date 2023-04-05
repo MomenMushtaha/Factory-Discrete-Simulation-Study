@@ -34,17 +34,18 @@ public class Ensamble {
         
         // Calculate standard deviation
         double[] deviation = new double[steps.length];
-        
+
         for (int i = 0; i < steps.length; i++) {
             double sumOfSquares = 0;
-        
+
             for (double ensembleAvg : ensembleAvgs) {
                 sumOfSquares += Math.pow(ensembleAvg - steps[i], 2);
             }
-        
+
             deviation[i] = Math.sqrt(sumOfSquares / (numSims - 1));
         }
-        
+
+
         // Print time step ensemble averages and standard deviations
         for (int i = 0; i < steps.length; i++) {
             System.out.printf("Time: "+i+", Ensemble Average: "+steps[i]+ ", Standard Deviation:" +deviation[i]+ "\n"  );

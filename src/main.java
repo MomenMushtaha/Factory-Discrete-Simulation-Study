@@ -93,3 +93,100 @@ public class main {
 
 
 }
+// import java.util.ArrayList;
+// import java.util.PriorityQueue;
+
+// public class Simulation {
+//     private ArrayList<Component> components;
+//     private Inspector[] inspectors;
+//     private Workstation[] workstations;
+//     private double simulationTime;
+//     private PriorityQueue<Event> eventList;
+//     private double[] bufferSizes;
+//     private int[] numBlockedInspectors;
+
+//     public Simulation() {
+//         // Read in input files and initialize data structures
+//         // Initialize Future event list with arrival events
+//     }
+
+//     public void run() {
+//         while (!eventList.isEmpty()) {
+//             Event event = eventList.poll();
+//             if (event.getTime() > simulationTime) {
+//                 break;
+//             }
+//         double elapsedTime = event.getTime() - startTime;
+//         startTime = event.getTime();
+
+//             if (event.getType() == EventType.ARRIVAL) {
+//                 handleArrivalEvent(event.getComponent());
+//             } else if (event.getType() == EventType.INSPECTION) {
+//                 handleInspectionEvent(event.getInspector(), event.getComponent());
+//             } else if (event.getType() == EventType.PROCESSING) {
+//                 handleProcessingEvent(event.getWorkstation(), event.getComponent());
+//             }
+// 	double[] workstationUtilization = calculateWorkstationUtilization();
+//         double[] bufferOccupancy = calculateBufferOccupancy();
+//         double[] inspectorBlockage = calculateInspectorBlockage();
+//         // Output statistics
+//         System.out.println("Elapsed Time: " + elapsedTime);
+//         System.out.println("Throughput: " + calculateThroughput());
+//         System.out.println("Workstation Utilization: ");
+//         for (int i = 0; i < workstations.length; i++) {
+//             System.out.println("W" + (i+1) + ": " + workstationUtilization[i]);
+//         }
+//         System.out.println("Buffer Occupancy: ");
+//         for (int i = 0; i < bufferSizes.length; i++) {
+//             System.out.println("B" + (i+1) + ": " + bufferOccupancy[i]);
+//         }
+//         System.out.println("Inspector Blockage: ");
+//         for (int i = 0; i < inspectors.length; i++) {
+//             System.out.println("I" + (i+1) + ": " + inspectorBlockage[i]);
+//         }
+
+//         }
+        
+//     }
+
+//     private void handleArrivalEvent(Component component) {
+//         // Assign component to appropriate buffer according to shortest queue policy
+//         // Update buffer size
+//         // Schedule inspection event for appropriate inspector
+//         // Schedule next arrival event
+//     }
+
+//     private void handleInspectionEvent(Inspector inspector, Component component) {
+//         // Assign component to appropriate buffer based on type
+//         // If buffer is empty, schedule processing event for appropriate workstation
+//         // Update inspector and buffer information
+//     }
+
+//     private void handleProcessingEvent(Workstation workstation, Component component) {
+//         // Remove component from buffer
+//         // Update buffer size
+//         // If buffer is not empty, schedule processing event for next component
+//         // Otherwise, workstation becomes idle
+//     }
+
+//     private double calculateThroughput() {
+//         // Calculate total number of completed components during simulation time
+//         // Divide by simulation time to get throughput
+//     }
+
+//     private double[] calculateWorkstationUtilization() {
+//         // Calculate total busy time for each workstation
+//         // Divide by simulation time to get utilization
+//         // Return array of utilization values for each workstation
+//     }
+
+//     private double[] calculateBufferOccupancy() {
+//         // Calculate average occupancy for each buffer during simulation time
+//         // Return array of occupancy values for each buffer
+//     }
+
+//     private double[] calculateInspectorBlockage() {
+//         // Calculate proportion of time each inspector is blocked during simulation time
+//         // Return array of blockage values for each inspector
+//     }
+// }
