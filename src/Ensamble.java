@@ -1,12 +1,9 @@
 public class Ensamble {
 
     public static void main(String[] args) {
-        // Create a simulation instance
-        Simulation simulationInstance = new Simulation();
-        
         // Ensemble averaging loop
-        int numberOfSimulations = 10; 
-        double[] ensembleAverages = new double[101];
+        int numSims = 10; 
+        double[] ensembleAvgs = new double[101];
         
         // Initialization phase
         int initializationTime = 10000;
@@ -16,45 +13,41 @@ public class Ensamble {
         }
         
         // Ensemble averaging loop
-        for (int i = 0; i < numberOfSimulations; i++) {
+        for (int i = 0; i < numSims; i++) {
             Simulation simulation = new Simulation();
             simulation.simulate();
-            ensembleAverages[i] = simulation.completedP1;
+            ensembleAvgs[i] = simulation.completedP1;
         }
         
         // Calculate ensemble averages
-        double[] timeStepAverages = new double[101];
+        double[] steps = new double[100];
         
-        for (int i = 0; i < timeStepAverages.length; i++) {
+        for (int i = 0; i < steps.length; i++) {
             double sum = 0;
         
-            for (double ensembleAverage : ensembleAverages) {
-                Simulation simulation = new Simulation();
-                simulation.simulate();
-                sum += ensembleAverage;
+            for (double ensembleAvg : ensembleAvgs) {
+                sum += ensembleAvg;
             }
         
-            timeStepAverages[i] = sum / numberOfSimulations;
+            steps[i] = sum / numSims;
         }
         
         // Calculate standard deviation
-        double[] timeStepStandardDeviations = new double[timeStepAverages.length];
+        double[] deviation = new double[steps.length];
         
-        for (int i = 0; i < timeStepAverages.length; i++) {
+        for (int i = 0; i < steps.length; i++) {
             double sumOfSquares = 0;
         
-            for (double ensembleAverage : ensembleAverages) {
-                Simulation simulation = new Simulation();
-                simulation.simulate();
-                sumOfSquares += Math.pow(ensembleAverage - timeStepAverages[i], 2);
+            for (double ensembleAvg : ensembleAvgs) {
+                sumOfSquares += Math.pow(ensembleAvg - steps[i], 2);
             }
         
-            timeStepStandardDeviations[i] = Math.sqrt(sumOfSquares / (numberOfSimulations - 1));
+            deviation[i] = Math.sqrt(sumOfSquares / (numSims - 1));
         }
         
         // Print time step ensemble averages and standard deviations
-        for (int i = 0; i < timeStepAverages.length; i++) {
-            System.out.printf("Time: %d, Ensemble Average: %.2f, Standard Deviation: %.2f%n", i, timeStepAverages[i], timeStepStandardDeviations[i]);
+        for (int i = 0; i < steps.length; i++) {
+            System.out.printf("Time: "+i+", Ensemble Average: "+steps[i]+ ", Standard Deviation:" +deviation[i]+ "\n"  );
         }
     }
     
