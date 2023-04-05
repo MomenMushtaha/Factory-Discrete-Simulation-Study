@@ -3,9 +3,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Workstation {
-    private int id;
-    private Map<String, Integer> buffer; // Modified buffer to store component type and count
-    private double finishTime;
+    public int id;
+    public Map<String, Integer> buffer; // Modified buffer to store component type and count
+    public double finishTime;
 
     public Workstation(int id) {
         this.id = id;

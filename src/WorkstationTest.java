@@ -11,7 +11,7 @@ class WorkstationTest {
             assertEquals(1, w.getId());
             assertEquals(0, w.getBuffer());
 
-            Component c1 = new Component("C1", 1, 0, 1, 1, 1);
+            Component c1 = new Component("C1", 1, 1, 1, 1);
             w.addComponentToBuffer(c1);
             assertEquals(1, w.getBufferCountForComponentType("C1"));
 
