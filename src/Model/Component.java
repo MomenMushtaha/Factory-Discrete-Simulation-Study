@@ -1,11 +1,20 @@
+package Model;
+
 import java.util.Objects;
+import java.util.UUID;
 
 // Represents a component with its type, inspector ID, arrival time, and required quantities for products P1, P2, and P3
 public class Component {
-    private String type;
-    private int inspectorId;
+    private int id;
+    private final String type;
+    private final int inspectorId;
     private double arrivalTime;
-    private double requiredForP1, requiredForP2, requiredForP3;
+    private final double requiredForP1;
+    private final double requiredForP2;
+    private final double requiredForP3;
+    private double timeSpentInQueue;
+
+
 
     public Component(String type, int inspectorId, double requiredForP1, double requiredForP2, double requiredForP3) {
         this.type = type;
@@ -13,6 +22,21 @@ public class Component {
         this.requiredForP1 = requiredForP1;
         this.requiredForP2 = requiredForP2;
         this.requiredForP3 = requiredForP3;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    //
+    public void setId() {
+        this.id = Integer.parseInt(generateUniqueId());
+    }
+
+
+    public static String generateUniqueId() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();
     }
 // Inside the Component class
 
@@ -39,6 +63,13 @@ public class Component {
 
     public String getType() {
         return type;
+    }
+    public double getTimeSpentInQueue() {
+        return timeSpentInQueue;
+    }
+
+    public void setTimeSpentInQueue(double timeSpentInQueue) {
+        this.timeSpentInQueue = timeSpentInQueue;
     }
 
     public int getInspectorId() {

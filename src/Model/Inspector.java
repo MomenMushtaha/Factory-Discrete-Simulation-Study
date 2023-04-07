@@ -1,6 +1,7 @@
+package Model;
 // Represents an inspector with an ID, queue, and finish time
 public class Inspector {
-    private int id;
+    private final int id;
     private int queue;
     private double finishTime;
 

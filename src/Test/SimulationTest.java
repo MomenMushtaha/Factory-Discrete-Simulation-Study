@@ -1,10 +1,13 @@
+package Test;
 
+import Run.Simulation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SimulationIntegrationTest {
+class SimulationTest {
     Simulation simulation;
 
     @BeforeEach
@@ -13,7 +16,7 @@ class SimulationIntegrationTest {
     }
 
     @Test
-    void testSimulationWithDifferentInspectorSpeeds() {
+    void testSimulationWithDifferentInspectorSpeeds() throws InterruptedException {
         simulation.avg1 *= 2;
         simulation.avg22 *= 0.5;
         simulation.avg23 *= 1.5;
@@ -26,7 +29,7 @@ class SimulationIntegrationTest {
     }
 
     @Test
-    void testSimulationWithDifferentWorkstationSpeeds() {
+    void testSimulationWithDifferentWorkstationSpeeds() throws InterruptedException {
         simulation.ws1 *= 1.5;
         simulation.ws2 *= 0.75;
         simulation.ws3 *= 2;
@@ -38,12 +41,21 @@ class SimulationIntegrationTest {
         assertTrue(simulation.completedP3 > 0, "No P3 products assembled");
     }
 
+    @Test
+    void testSimulationWithInsufficientComponents() throws InterruptedException {
+        simulation.avg1 *= 100;
+        simulation.avg22 *= 100;
+        simulation.avg23 *= 100;
+        simulation.simulate();
 
-
-
+        // Check if the simulation produces the correct number of assembled products
+        assertEquals(0, simulation.completedP1, "P1 products assembled");
+        assertEquals(0, simulation.completedP2, "P2 products assembled");
+        assertEquals(0, simulation.completedP3, "P3 products assembled");
+    }
 
     @Test
-    void testSimulationWithExternalFactors() {
+    void testSimulationWithExternalFactors() throws InterruptedException {
         // Here you can add external factors that affect the simulation, e.g., reducing the simulation time
         simulation.simulate();
 

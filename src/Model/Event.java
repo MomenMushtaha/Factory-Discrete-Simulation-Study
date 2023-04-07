@@ -1,10 +1,11 @@
+package Model;
 // Represents an event with a type, time, associated component, inspector, and workstation
 public class Event implements Comparable<Event> {
-    private EventType type;
-    private double time;
-    private Component component;
-    private Inspector inspector;
-    private Workstation workstation;
+    private final EventType type;
+    private final double time;
+    private final Component component;
+    private final Inspector inspector;
+    private final Workstation workstation;
 
     public Event(EventType type, double time, Component component, Inspector inspector, Workstation workstation) {
         this.type = type;
@@ -13,9 +14,6 @@ public class Event implements Comparable<Event> {
         this.inspector = inspector;
         this.workstation = workstation;
     }
-
-
-
 
 
     public EventType getType() {
