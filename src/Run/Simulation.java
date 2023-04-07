@@ -1,7 +1,7 @@
 package Run;
 
 import Model.*;
-import Stats.WorkstationStatistics;
+import Util.WorkstationStatistics;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -331,6 +331,4 @@ public class Simulation {
         printLittlesLawResults();
 
     }
-    public static void main(String[] args) {
-        Simulation initializationSimulation = new Simulation();
-        initializationSimulation.simulate();}}
+  }

@@ -1,4 +1,4 @@
-package Stats;
+package Util;
 
 import Model.Workstation;
 
