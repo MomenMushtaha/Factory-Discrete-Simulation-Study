@@ -2,45 +2,70 @@ package Run;
 
 import Model.*;
 import Stats.WorkstationStatistics;
-import Util.Util;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Scanner;
 
 public class Simulation {
-
     public Workstation workstation1, workstation2, workstation3;
     public Inspector inspector1, inspector2;
     public double avg1, avg22, avg23; // Inspector Average Values
     public double ws1, ws2, ws3; // Workstation Average Values
     public int completedP1, completedP2, completedP3; // Completed Components
-    public double totalTimeSpentInQueueWS1 = 0, totalTimeSpentInQueueWS2 = 0, totalTimeSpentInQueueWS3 = 0;
-    public double totalProcessingTimeWS1 = 0, totalProcessingTimeWS2 = 0, totalProcessingTimeWS3 = 0;
+    public double totalTimeSpentInQueueWS1, totalTimeSpentInQueueWS2, totalTimeSpentInQueueWS3;
+    public double totalProcessingTimeWS1, totalProcessingTimeWS2, totalProcessingTimeWS3;
 
-    private final HashMap<String, Double> timeComponentEnteredQueue = new HashMap<>();
-    private final HashMap<String, Double> timeComponentLeftQueue = new HashMap<>();
+    public HashMap<String, Double> timeComponentEnteredQueue = new HashMap<>();
+    public HashMap<String, Double> timeComponentLeftQueue = new HashMap<>();
     public PriorityQueue<Event> eventQueue;
     public WorkstationStatistics workstationStats;
     public double simulationTime = 10000;
+    public long finished;
 
 
     public Simulation() {
         // Setting Average times of each '.dat' file
-        avg1 = Util.calculateAverageTime("ProjectFiles/servinsp1.dat");
-        avg22 = Util.calculateAverageTime("ProjectFiles/servinsp22.dat");
-        avg23 = Util.calculateAverageTime("ProjectFiles/servinsp23.dat");
-        ws1 = Util.calculateAverageTime("ProjectFiles/ws1.dat");
-        ws2 = Util.calculateAverageTime("ProjectFiles/ws2.dat");
-        ws3 = Util.calculateAverageTime("ProjectFiles/ws3.dat");
+        avg1 = (long)AvgTime("ProjectFiles/servinsp1.dat");
+        avg22 = (long)AvgTime("ProjectFiles/servinsp22.dat");
+        avg23 =(long) AvgTime("ProjectFiles/servinsp23.dat");
+        ws1 = (long)AvgTime("ProjectFiles/ws1.dat");
+        ws2 = (long) AvgTime("ProjectFiles/ws2.dat");
+        ws3 =(long) AvgTime("ProjectFiles/ws3.dat");
+
     }
 
-    public void simulate() {
+    // This method reads the .dat files and calculates the average processing times
+    public double AvgTime(String filename) {
+        try{
+            Scanner scanner = new Scanner(new File(filename));
+            double sum = 0;
+            double count = 0;
+            while (scanner.hasNextLine()) {
+                String nextLine = scanner.nextLine();
 
+                double nextDub = Double.parseDouble(nextLine);
+                sum += nextDub;
+                count++;
+            }
+            scanner.close();
+            double average = sum / count;
+
+            return average;
+        } catch (FileNotFoundException e) {
+            System.out.println("The file could not be found.");
+        } catch (NumberFormatException e) {
+            System.out.println("The file contains an invalid number.");
+        }
+        return 0;
+    }
+
+    public void simulate() throws InterruptedException {
         // Initialize inspectors with their respective average processing times
-        inspector1 = new Inspector(1, 0);
-        inspector2 = new Inspector(2, 0);
+        Inspector inspector1 = new Inspector(1, 0);
+        Inspector inspector2 = new Inspector(2, 0);
 
         // Create components
         Component c1 = new Component("C1", 1, 1, 1, 1);
@@ -52,36 +77,27 @@ public class Simulation {
         Workstation workstation2 = new Workstation(2);
         Workstation workstation3 = new Workstation(3);
 
-        workstationStats = new WorkstationStatistics();
-
-        workstationStats.addWorkstation(workstation1);
-        workstationStats.addWorkstation(workstation2);
-        workstationStats.addWorkstation(workstation3);
-
         // Initialize event queue
         eventQueue = new PriorityQueue<>();
-        //eventQueueNew = new PriorityQueue<>();
 
         // Add initial inspection finished events
         eventQueue.add(new Event(EventType.INSPECTION_FINISHED, avg1, c1, inspector1, null));
         eventQueue.add(new Event(EventType.INSPECTION_FINISHED, avg22, c2, inspector2, null));
         eventQueue.add(new Event(EventType.INSPECTION_FINISHED, avg23, c3, inspector2, null));
-        // Run the simulation for a fixed time (10,000 seconds in this case)
+
         int assembledProducts = 0;
         while (!eventQueue.isEmpty() && eventQueue.peek().getTime() <= simulationTime) {
             Event event = eventQueue.poll();
-            //eventQueueNew.add(event);
 
             switch (event.getType()) {
-                case INSPECTION_FINISHED ->
-                        handleInspectionFinished(event, workstation1, workstation2, workstation3, eventQueue);
+                case INSPECTION_FINISHED -> handleInspectionFinished(event, workstation1, workstation2, workstation3, eventQueue);
                 case ASSEMBLY_STARTED -> handleAssemblyStarted(event, eventQueue);
                 case ASSEMBLY_FINISHED -> {
                     handleAssemblyFinished(event);
                     assembledProducts++;
                 }
             }
-                }
+        }
         System.out.println("Assembled products: " + assembledProducts);
         printLittlesLawResults();
     }
@@ -113,6 +129,7 @@ public class Simulation {
         timeComponentEnteredQueue.put(component.getType(), event.getTime());
         if (eventQueue.peek() == null || eventQueue.peek().getTime() > simulationTime) {
             double remainingTime = simulationTime - event.getTime();
+
             totalTimeSpentInQueueWS1 += targetWorkstation.getBufferCountForComponentType("C1") * remainingTime;
             totalTimeSpentInQueueWS2 += targetWorkstation.getBufferCountForComponentType("C2") * remainingTime;
             totalTimeSpentInQueueWS3 += targetWorkstation.getBufferCountForComponentType("C3") * remainingTime;
@@ -158,7 +175,7 @@ public class Simulation {
         // Increment the total time spent in the queue for the corresponding workstation
         String key = component.getType();
         if (timeComponentEnteredQueue.containsKey(key)) {
-            double timeSpentInQueue = event.getTime() - timeComponentEnteredQueue.get(key);
+            double timeSpentInQueue = event.getTime()- timeComponentEnteredQueue.get(key).longValue();
             if (workstation.getId() == 1) {
                 totalTimeSpentInQueueWS1 += timeSpentInQueue;
             } else if (workstation.getId() == 2) {
@@ -170,7 +187,9 @@ public class Simulation {
 
         // Store the time when the component leaves the queue
         timeComponentLeftQueue.put(key, event.getTime());
+
         workstation.removeComponentFromBuffer(component);
+
         // Calculate assembly time based on the workstation
         double assemblyTime;
         if (workstation.getId() == 1) {
@@ -180,10 +199,12 @@ public class Simulation {
         } else {
             assemblyTime = ws3;
         }
+
         // Schedule assembly finished event
         double assemblyFinishTime = event.getTime() + assemblyTime;
         eventQueue.add(new Event(EventType.ASSEMBLY_FINISHED, assemblyFinishTime, component, null, workstation));
     }
+
 
 
     //This method handles the assembly finished events
@@ -208,6 +229,8 @@ public class Simulation {
             totalProcessingTimeWS3 += assemblyTime;
             completedP3++; // Increment completed products counter for Workstation 3
         }
+
+
         System.out.printf("Workstation %d finished assembling product %s at time %.2f%n", workstation.getId(), productType, event.getTime());
     }
 
@@ -238,47 +261,79 @@ public class Simulation {
         System.out.printf("Facility - Avg time in system (W): %.2f, Avg arrival rate (λ): %.4f, Avg # of components in system (L): %.2f%n", avgTimeInSystemFacility, lambdaFacility, LFacility);
     }
 
-    public static void main(String[] args) {
-        int n = 10; // Initial number of replications
-        double alpha = 0.05;
-        double beta = 0.1;
-        double maxConfidenceIntervalWidthPercentage = 0.2;
-        boolean areConfidenceIntervalsAcceptable = false;
+    public void simulate(double simulationTime) {
+        long startTime = System.currentTimeMillis();
 
-        while (!areConfidenceIntervalsAcceptable) {
-            List<Simulation> replications = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                Simulation sim = new Simulation();
-                sim.simulate();
-                replications.add(sim);
+        // Initialize inspectors with their respective average processing times
+        Inspector inspector1 = new Inspector(1, 0);
+        Inspector inspector2 = new Inspector(2, 0);
+
+        // Create components
+        Component c1 = new Component("C1", 1, 1, 1, 1);
+        Component c2 = new Component("C2", 2, 0, 1, 0);
+        Component c3 = new Component("C3", 2, 0, 0, 1);
+
+
+        // Initialize workstations
+        Workstation workstation1 = new Workstation(1);
+        Workstation workstation2 = new Workstation(2);
+        Workstation workstation3 = new Workstation(3);
+
+
+        // Initialize event queue
+        eventQueue = new PriorityQueue<>();
+        //eventQueueNew = new PriorityQueue<>();
+
+        // Add initial inspection finished events
+        eventQueue.add(new Event(EventType.INSPECTION_FINISHED, avg1, c1, inspector1, null));
+        eventQueue.add(new Event(EventType.INSPECTION_FINISHED, avg22, c2, inspector2, null));
+        eventQueue.add(new Event(EventType.INSPECTION_FINISHED, avg23, c3, inspector2, null));
+
+        // Run the simulation for a fixed time (10,000 seconds in this case)
+
+        int assembledProducts = 0;
+        while (!eventQueue.isEmpty() && eventQueue.peek().getTime() <= simulationTime) {
+            Event event = eventQueue.poll();
+            //eventQueueNew.add(event);
+
+            switch (event.getType()) {
+                case INSPECTION_FINISHED -> handleInspectionFinished(event, workstation1, workstation2, workstation3, eventQueue);
+                case ASSEMBLY_STARTED -> handleAssemblyStarted(event, eventQueue);
+                case ASSEMBLY_FINISHED -> {
+                    handleAssemblyFinished(event);
+                    assembledProducts++;
+                }
+
             }
-            // Calculate average values for each workstation across all replications
-            double avgP1 = replications.stream().mapToDouble(s -> s.completedP1).average().orElse(0);
-            double avgP2 = replications.stream().mapToDouble(s -> s.completedP2).average().orElse(0);
-            double avgP3 = replications.stream().mapToDouble(s -> s.completedP3).average().orElse(0);
 
-            // Calculate standard deviations for each workstation across all replications
-            double stdDevP1 = Math.sqrt(replications.stream().mapToDouble(s -> Math.pow(s.completedP1 - avgP1, 2)).sum() / (n - 1));
-            double stdDevP2 = Math.sqrt(replications.stream().mapToDouble(s -> Math.pow(s.completedP2 - avgP2, 2)).sum() / (n - 1));
-            double stdDevP3 = Math.sqrt(replications.stream().mapToDouble(s -> Math.pow(s.completedP3 - avgP3, 2)).sum() / (n - 1));
 
-            // Calculate confidence intervals for each workstation
-            double tValue = Util.getTValue(alpha, n);
-            double confidenceIntervalWidthP1 = tValue * stdDevP1 / Math.sqrt(n);
-            double confidenceIntervalWidthP2 = tValue * stdDevP2 / Math.sqrt(n);
-            double confidenceIntervalWidthP3 = tValue * stdDevP3 / Math.sqrt(n);
-
-            // Check if confidence intervals do not exceed 20% of the estimated value
-            if (confidenceIntervalWidthP1 / avgP1 <= maxConfidenceIntervalWidthPercentage &&
-                    confidenceIntervalWidthP2 / avgP2 <= maxConfidenceIntervalWidthPercentage &&
-                    confidenceIntervalWidthP3 / avgP3 <= maxConfidenceIntervalWidthPercentage) {
-                areConfidenceIntervalsAcceptable = true;
-            } else {
-                n += 1; // Increase the number of replications if confidence intervals are not acceptable
-            }
         }
+        long endTime = System.currentTimeMillis();
+        finished = endTime - startTime;
+        System.out.println("Simulation finished in " + finished + " milliseconds");
+        printResults();
 
-        System.out.println("Number of replications needed: " + n);
     }
 
+
+    public void printResults() {
+        System.out.println("Simulation Results:");
+        System.out.printf("Total time spent in queue for Workstation 1: %.2f%n", totalTimeSpentInQueueWS1);
+        System.out.printf("Total time spent in queue for Workstation 2: %.2f%n",  totalTimeSpentInQueueWS2);
+        System.out.printf("Total time spent in queue for Workstation 3: %.2f%n", totalTimeSpentInQueueWS3);
+        System.out.printf("Total processing time for Workstation 1: %.2f%n", totalProcessingTimeWS1);
+        System.out.printf("Total processing time for Workstation 2: %.2f%n",totalProcessingTimeWS2);
+        System.out.printf("Total processing time for Workstation 3: %.2f%n",totalProcessingTimeWS3);
+        System.out.printf("Total number of completed products for Workstation 1: %d%n", completedP1);
+        System.out.printf("Total number of completed products for Workstation 2: %d%n", completedP2);
+        System.out.printf("Total number of completed products for Workstation 3: %d%n", completedP3);
+        System.out.printf("Total number of completed products for Facility: %d%n", completedP1 + completedP2 + completedP3);
+        printLittlesLawResults();
+    }
+    public static void main(String[] args) throws InterruptedException {
+
+        Simulation initializationSimulation = new Simulation();
+        initializationSimulation.simulate();
+
+    }
 }

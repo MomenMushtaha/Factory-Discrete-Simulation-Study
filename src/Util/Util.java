@@ -1,5 +1,6 @@
 package Util;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.distribution.TDistribution;
 
 import java.io.File;
@@ -40,13 +41,17 @@ public class Util {
         TDistribution tDistribution = new TDistribution(degreesOfFreedom);
 
         // Calculate the t-value using the t-distribution object and the given alpha
-        double tValue = tDistribution.inverseCumulativeProbability(1 - alpha / 2);
 
-        return tValue;
+        return tDistribution.inverseCumulativeProbability(1 - alpha / 2);
     }
+    public static int getRequiredSampleSize(double alpha, double beta, double maxError, double estimatedValue, double populationVariance) {
+        double marginOfError = maxError * estimatedValue;
 
-    public static int getRequiredSampleSize(double alpha, double beta, double maxError, double estimatedValue) {
-        // Implement the formula from slides to calculate the required sample size
-        // based on the desired values of alpha, beta, maxError, and estimatedValue.
-    return 0;}
+        NormalDistribution normalDist = new NormalDistribution();
+        double zAlpha = normalDist.inverseCumulativeProbability(1 - alpha / 2);
+        double zBeta = normalDist.inverseCumulativeProbability(1 - beta);
+
+        double requiredSampleSize = Math.pow(zAlpha + zBeta, 2) * (populationVariance / Math.pow(marginOfError, 2));
+        return (int) Math.ceil(requiredSampleSize);
+    }
 }

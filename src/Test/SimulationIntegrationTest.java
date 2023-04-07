@@ -15,7 +15,7 @@ class SimulationIntegrationTest {
     }
 
     @Test
-    void testSimulationWithDifferentInspectorSpeeds() {
+    void testSimulationWithDifferentInspectorSpeeds() throws InterruptedException {
         simulation.avg1 *= 2;
         simulation.avg22 *= 0.5;
         simulation.avg23 *= 1.5;
@@ -28,7 +28,7 @@ class SimulationIntegrationTest {
     }
 
     @Test
-    void testSimulationWithDifferentWorkstationSpeeds() {
+    void testSimulationWithDifferentWorkstationSpeeds() throws InterruptedException {
         simulation.ws1 *= 1.5;
         simulation.ws2 *= 0.75;
         simulation.ws3 *= 2;
@@ -42,7 +42,7 @@ class SimulationIntegrationTest {
 
 
     @Test
-    void testSimulationWithExternalFactors() {
+    void testSimulationWithExternalFactors() throws InterruptedException {
         // Here you can add external factors that affect the simulation, e.g., reducing the simulation time
         simulation.simulate();
 

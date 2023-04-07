@@ -1,12 +1,9 @@
 package Run;
-
 import Model.*;
-
+import Util.Util;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class SimInitialization {
@@ -324,6 +321,45 @@ public class SimInitialization {
         // Run the main simulation after initialization
         simInitialization.simulate(initializationTime);
         System.out.println("Initialization phase completed. Initialization time: " + initializationTime);
+        int n = 10; // Initial number of replications
+        double alpha = 0.05;
+        double beta = 0.1;
+        double maxConfidenceIntervalWidthPercentage = 0.2;
+        boolean areConfidenceIntervalsAcceptable = false;
+
+        while (!areConfidenceIntervalsAcceptable) {
+            List<Simulation> replications = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                Simulation sim = new Simulation();
+                replications.add(sim);
+            }
+            // Calculate average values for each workstation across all replications
+            double avgP1 = replications.stream().mapToDouble(s -> s.completedP1).average().orElse(0);
+            double avgP2 = replications.stream().mapToDouble(s -> s.completedP2).average().orElse(0);
+            double avgP3 = replications.stream().mapToDouble(s -> s.completedP3).average().orElse(0);
+
+            // Calculate standard deviations for each workstation across all replications
+            double stdDevP1 = Math.sqrt(replications.stream().mapToDouble(s -> Math.pow(s.completedP1 - avgP1, 2)).sum() / (n - 1));
+            double stdDevP2 = Math.sqrt(replications.stream().mapToDouble(s -> Math.pow(s.completedP2 - avgP2, 2)).sum() / (n - 1));
+            double stdDevP3 = Math.sqrt(replications.stream().mapToDouble(s -> Math.pow(s.completedP3 - avgP3, 2)).sum() / (n - 1));
+
+            // Calculate confidence intervals for each workstation
+            double tValue = Util.getTValue(alpha, n);
+            double confidenceIntervalWidthP1 = tValue * stdDevP1 / Math.sqrt(n);
+            double confidenceIntervalWidthP2 = tValue * stdDevP2 / Math.sqrt(n);
+            double confidenceIntervalWidthP3 = tValue * stdDevP3 / Math.sqrt(n);
+
+            // Check if confidence intervals do not exceed 20% of the estimated value
+            if (confidenceIntervalWidthP1 / avgP1 <= maxConfidenceIntervalWidthPercentage &&
+                    confidenceIntervalWidthP2 / avgP2 <= maxConfidenceIntervalWidthPercentage &&
+                    confidenceIntervalWidthP3 / avgP3 <= maxConfidenceIntervalWidthPercentage) {
+                areConfidenceIntervalsAcceptable = true;
+            } else {
+                n += 1; // Increase the number of replications if confidence intervals are not acceptable
+            }
+        }
+
+        System.out.println("Number of replications needed: " + n);
 
 
     }
