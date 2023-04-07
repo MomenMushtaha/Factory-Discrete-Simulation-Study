@@ -64,4 +64,36 @@ class SimulationTest {
         assertTrue(simulation.completedP2 > 0, "No P2 products assembled");
         assertTrue(simulation.completedP3 > 0, "No P3 products assembled");
     }
+
+    @Test
+    void avgTime() {
+    }
+
+    @Test
+    void simulate() {
+    }
+
+    @Test
+    void printLittlesLawResults() {
+    }
+
+    @Test
+    void testSimulate() {
+    }
+
+    @Test
+    void testPrintLittlesLawResults() {
+    }
+
+    @Test
+    void printResults() {
+    }
+
+    @Test
+    void testSimulate1() {
+    }
+
+    @Test
+    void main() {
+    }
 }
